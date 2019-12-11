@@ -3,7 +3,7 @@
 // Definitions by: Alorel <https://github.com/Alorel>
 //                 Seulgi Kim <https://github.com/sgkim126>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.3
+// TypeScript Version: 3.1
 
 /// <reference types="node" />
 
@@ -27,7 +27,7 @@ export interface WorkerPool {
      * and executed there with the provided parameters. The provided function must be static,
      * it must not depend on variables in a surrounding scope.
      */
-    exec(method: ((...args: any[]) => any) | string, params: any[] | null): Promise<any>;
+    exec<T extends (...args: any[]) => any>(method: T | string, params: Parameters<T> | null): Promise<ReturnType<T>>;
 
     /**
      * Create a proxy for the worker pool.

@@ -37,6 +37,14 @@ pool.exec('foo', null)
     .then(() => pool.exec('foo', []))
     .then(() => pool.exec(() => {}, null));
 
+function add(a: number, b: number): number {
+    return a + b;
+}
+pool.exec(add, [1, 2])
+    .then((c) => c);
+pool.exec<typeof add>('add', [1, 2])
+    .then((c) => c);
+
 new wp.Promise.CancellationError();
 new wp.Promise.TimeoutError();
 
