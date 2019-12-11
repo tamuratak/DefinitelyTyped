@@ -34,7 +34,9 @@ export interface WorkerPool {
      * The proxy contains a proxy for all methods available on the worker.
      * All methods return promises resolving the methods result.
      */
-    proxy(): Promise<any>;
+    proxy<T extends {[k: string]: (...args: any[]) => any}>(): Promise<{
+        [M in keyof T]: (...args: Parameters<T[M]>) => Promise<ReturnType<T[M]>>
+    }>;
 
     /** Retrieve statistics on workers, and active and pending tasks. */
     stats(): WorkerPoolStats;
