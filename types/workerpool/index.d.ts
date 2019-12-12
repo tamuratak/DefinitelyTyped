@@ -17,6 +17,10 @@ export interface WorkerPoolStats {
     activeTasks: number;
 }
 
+export type Proxy<T extends {[k: string]: (...args: any[]) => any}> = {
+    [M in keyof T]: (...args: Parameters<T[M]>) => Promise<ReturnType<T[M]>>
+}
+
 export interface WorkerPool {
     /**
      * Execute a function on a worker with given arguments.
@@ -34,9 +38,7 @@ export interface WorkerPool {
      * The proxy contains a proxy for all methods available on the worker.
      * All methods return promises resolving the methods result.
      */
-    proxy<T extends {[k: string]: (...args: any[]) => any}>(): Promise<{
-        [M in keyof T]: (...args: Parameters<T[M]>) => Promise<ReturnType<T[M]>>
-    }>;
+    proxy<T extends {[k: string]: (...args: any[]) => any}>(): Promise<Proxy<T>>;
 
     /** Retrieve statistics on workers, and active and pending tasks. */
     stats(): WorkerPoolStats;
